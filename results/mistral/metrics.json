@@ -1,0 +1,11 @@
+{
+    "Model": "mistral",
+    "Truth Score": 0.6289486741984729,
+    "Hallucination Rate": 0.4575,
+    "Precision": 1.0,
+    "Recall": 0.5425,
+    "F1": 0.7034035656401945,
+    "Refusal Rate": 0.0,
+    "Avg Length": 44.80625,
+    "Severity": 0.3710513258015271
+}

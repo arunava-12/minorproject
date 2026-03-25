@@ -1,0 +1,11 @@
+{
+    "Model": "phi3",
+    "Truth Score": 0.6116928992333124,
+    "Hallucination Rate": 0.51875,
+    "Precision": 1.0,
+    "Recall": 0.48125,
+    "F1": 0.6497890295358649,
+    "Refusal Rate": 0.0025,
+    "Avg Length": 56.9225,
+    "Severity": 0.3883071007666877
+}

@@ -1,0 +1,11 @@
+{
+    "Model": "gemma",
+    "Truth Score": 0.6367422446864657,
+    "Hallucination Rate": 0.43625,
+    "Precision": 1.0,
+    "Recall": 0.56375,
+    "F1": 0.7210231814548361,
+    "Refusal Rate": 0.0525,
+    "Avg Length": 42.4125,
+    "Severity": 0.36325775531353427
+}
