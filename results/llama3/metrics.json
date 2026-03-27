@@ -1,12 +1,12 @@
 {
     "Model": "llama3",
-    "Truth Score": 0.007237520775206576,
-    "Accuracy": 0.61625,
-    "Hallucination Rate": 0.18,
+    "Truth Score": 0.062425063685450366,
+    "Accuracy": 0.90875,
+    "Hallucination Rate": 0.34625,
     "ROC-AUC": 1.0,
-    "F1": 0.6945273631840796,
-    "PR-AUC": 1.0,
-    "Refusal Rate": 0.00875,
-    "Avg Length": 75.1775,
-    "Severity": -0.007237520775206576
+    "F1": 0.9249743062692704,
+    "PR-AUC": 0.9999999999999999,
+    "Refusal Rate": 0.55375,
+    "Avg Length": 36.13625,
+    "Severity": -0.062425063685450366
 }
