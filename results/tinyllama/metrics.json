@@ -1,11 +1,12 @@
 {
     "Model": "tinyllama",
-    "Truth Score": 0.5982912912173197,
-    "Hallucination Rate": 0.5725,
-    "Precision": 1.0,
-    "Recall": 0.4275,
-    "F1": 0.5989492119089317,
+    "Truth Score": -0.17090071016107686,
+    "Accuracy": 0.915,
+    "Hallucination Rate": 0.745,
+    "ROC-AUC": 1.0,
+    "F1": 0.8571428571428571,
+    "PR-AUC": 1.0,
     "Refusal Rate": 0.0175,
     "Avg Length": 40.89875,
-    "Severity": 0.40170870878268033
+    "Severity": 0.17090071016107686
 }

@@ -1,11 +1,12 @@
 {
     "Model": "mistral",
-    "Truth Score": 0.6289486741984729,
-    "Hallucination Rate": 0.4575,
-    "Precision": 1.0,
-    "Recall": 0.5425,
-    "F1": 0.7034035656401945,
-    "Refusal Rate": 0.0,
+    "Truth Score": 0.056747459893940685,
+    "Accuracy": 0.9475,
+    "Hallucination Rate": 0.3875,
+    "ROC-AUC": 1.0,
+    "F1": 0.9552238805970149,
+    "PR-AUC": 1.0,
+    "Refusal Rate": 0.0075,
     "Avg Length": 44.80625,
-    "Severity": 0.3710513258015271
+    "Severity": -0.056747459893940685
 }

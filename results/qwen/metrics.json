@@ -1,11 +1,12 @@
 {
     "Model": "qwen",
-    "Truth Score": 0.6149898720462806,
-    "Hallucination Rate": 0.51125,
-    "Precision": 1.0,
-    "Recall": 0.48875,
-    "F1": 0.6565910999160369,
-    "Refusal Rate": 0.0,
+    "Truth Score": -0.17324310182264527,
+    "Accuracy": 0.94,
+    "Hallucination Rate": 0.735,
+    "ROC-AUC": 1.0,
+    "F1": 0.8983050847457628,
+    "PR-AUC": 1.0,
+    "Refusal Rate": 0.00375,
     "Avg Length": 61.4,
-    "Severity": 0.38501012795371936
+    "Severity": 0.17324310182264527
 }
