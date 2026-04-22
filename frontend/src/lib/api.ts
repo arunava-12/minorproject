@@ -9,12 +9,28 @@ export interface EvaluationResult {
   hallucination: boolean;
   refusal: boolean;
   length: number;
+  mode?: string;
+}
+
+export interface AskStartResponse {
+  job_id: string;
+  status: string;
+}
+
+export interface ProgressResponse {
+  status: string;
+  current: number;
+  total: number;
+  model: string | null;
+  eta: number;
+  winner?: string | null;
+  results: EvaluationResult[];
 }
 
 export interface AskResponse {
-  question: string;
+  question?: string;
+  winner?: string | null;
   results: EvaluationResult[];
-  winner: string;
 }
 
 export interface ModelHistory {
@@ -25,26 +41,94 @@ export interface ModelHistory {
   details?: any;
 }
 
-export async function getModels(): Promise<string[]> {
-  const res = await fetch(`${API_BASE_URL}/models`);
-  if (!res.ok) throw new Error("Failed to fetch models");
+async function handleJson(res: Response) {
+  if (!res.ok) {
+    throw new Error("Request failed");
+  }
   return res.json();
 }
 
-export async function askQuestion(question: string, models: string[]): Promise<AskResponse> {
+export async function getModels(): Promise<string[]> {
+  const res = await fetch(`${API_BASE_URL}/models`);
+  return handleJson(res);
+}
+
+export async function askQuestion(
+  question: string,
+  models: string[]
+): Promise<AskStartResponse> {
   const res = await fetch(`${API_BASE_URL}/ask`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json"
     },
-    body: JSON.stringify({ question, models }),
+    body: JSON.stringify({ question, models })
   });
-  if (!res.ok) throw new Error("Failed to get response from models");
-  return res.json();
+
+  return handleJson(res);
+}
+
+export async function getProgress(
+  jobId: string
+): Promise<ProgressResponse> {
+  const res = await fetch(`${API_BASE_URL}/progress/${jobId}`);
+  return handleJson(res);
 }
 
 export async function getHistory(): Promise<ModelHistory[]> {
   const res = await fetch(`${API_BASE_URL}/history`);
-  if (!res.ok) throw new Error("Failed to fetch history");
-  return res.json();
+  return handleJson(res);
+}
+
+/* ---------- Export Helpers ---------- */
+
+export function exportToCSV(
+  question: string,
+  winner: string | null | undefined,
+  rows: EvaluationResult[]
+) {
+  const headers = [
+    "Model",
+    "Reliability",
+    "Truth Score",
+    "Latency",
+    "Hallucination",
+    "Refusal",
+    "Length"
+  ];
+
+  const data = rows.map((r) => [
+    r.model,
+    r.reliability_score,
+    r.truth_score,
+    r.latency,
+    r.hallucination ? "Yes" : "No",
+    r.refusal ? "Yes" : "No",
+    r.length
+  ]);
+
+  const content = [
+    [`Question: ${question}`],
+    [`Winner: ${winner ?? "N/A"}`],
+    [],
+    headers,
+    ...data
+  ]
+    .map((row) => row.join(","))
+    .join("\n");
+
+  const blob = new Blob([content], {
+    type: "text/csv;charset=utf-8;"
+  });
+
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "truthfulqa-report.csv";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+export function exportToPDF() {
+  window.print();
 }

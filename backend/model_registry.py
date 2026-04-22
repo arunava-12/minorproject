@@ -115,7 +115,7 @@ class ModelRegistry:
 
         elif fmt == "chat_template":
             messages = [{"role": "user", "content": question}]
-            chat = tokenizer.apply_chat_template(
+            prompt = tokenizer.apply_chat_template(
                 messages,
                 tokenize=False,
                 add_generation_prompt=True

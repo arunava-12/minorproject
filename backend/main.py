@@ -1,8 +1,9 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List
 import uuid
+import time
 
 from model_registry import registry
 from evaluator import evaluate_answer
@@ -35,32 +36,24 @@ async def get_progress(job_id: str):
     return progress_store.get(job_id, {"status": "not_found"})
 
 
-@app.post("/api/ask")
-async def ask_question(request: AskRequest):
-    if not request.models:
-        raise HTTPException(status_code=400, detail="No models selected")
-
-    job_id = str(uuid.uuid4())
-
-    progress_store[job_id] = {
-        "status": "running",
-        "current": 0,
-        "total": len(request.models),
-        "model": None,
-        "results": []
-    }
-
+def run_comparison(job_id: str, question: str, selected_models: List[str]):
     results = []
 
     preferred_order = [
-        "tinyllama", "phi3", "gemma",
-        "qwen", "mistral", "llama3"
+        "tinyllama",
+        "phi3",
+        "gemma",
+        "qwen",
+        "mistral",
+        "llama3",
     ]
 
-    selected = [m for m in preferred_order if m in request.models]
+    selected = [m for m in preferred_order if m in selected_models]
+
+    start_time = time.time()
 
     for idx, model_name in enumerate(selected, start=1):
-        progress_store[job_id]["current"] = idx
+        progress_store[job_id]["current"] = idx - 1
         progress_store[job_id]["model"] = model_name
 
         try:
@@ -68,10 +61,10 @@ async def ask_question(request: AskRequest):
 
             answer, latency = registry.generate_answer(
                 model_name,
-                request.question
+                question
             )
 
-            metrics = evaluate_answer(request.question, answer)
+            metrics = evaluate_answer(question, answer)
 
             row = {
                 "model": model_name,
@@ -104,7 +97,21 @@ async def ask_question(request: AskRequest):
         print("=" * 90 + "\n")
 
         results.append(row)
-        progress_store[job_id]["results"] = results
+
+        elapsed = time.time() - start_time
+        completed = len(results)
+        avg = elapsed / completed if completed else 0
+        remaining = len(selected) - completed
+        eta = round(avg * remaining, 1)
+
+        progress_store[job_id].update({
+            "status": "running",
+            "current": completed,
+            "total": len(selected),
+            "model": model_name,
+            "results": results,
+            "eta": eta
+        })
 
     valid = [r for r in results if not r["answer"].startswith("Error:")]
 
@@ -115,12 +122,41 @@ async def ask_question(request: AskRequest):
             key=lambda x: (x["reliability_score"], -x["latency"])
         )["model"]
 
-    progress_store[job_id]["status"] = "done"
-    progress_store[job_id]["winner"] = winner
+    progress_store[job_id].update({
+        "status": "done",
+        "current": len(selected),
+        "total": len(selected),
+        "winner": winner,
+        "results": results,
+        "eta": 0
+    })
+
+
+@app.post("/api/ask")
+async def ask_question(request: AskRequest, background_tasks: BackgroundTasks):
+    if not request.models:
+        raise HTTPException(status_code=400, detail="No models selected")
+
+    job_id = str(uuid.uuid4())
+
+    progress_store[job_id] = {
+        "status": "running",
+        "current": 0,
+        "total": len(request.models),
+        "model": None,
+        "results": [],
+        "winner": None,
+        "eta": 0
+    }
+
+    background_tasks.add_task(
+        run_comparison,
+        job_id,
+        request.question,
+        request.models
+    )
 
     return {
         "job_id": job_id,
-        "question": request.question,
-        "results": results,
-        "winner": winner
+        "status": "started"
     }

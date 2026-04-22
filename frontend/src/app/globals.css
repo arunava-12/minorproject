@@ -1,98 +1,121 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #84cc16; /* lime-400 */
-  --color-accent: #06b6d4; /* cyan-400 */
-  --color-secondary: #a855f7; /* purple-400 */
+  --color-primary: #84cc16;
+  --color-accent: #06b6d4;
+  --color-secondary: #a855f7;
 }
 
 :root {
   --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 3, 7, 18;
+  --background-start-rgb: 2, 6, 23;
+  --background-mid-rgb: 10, 15, 35;
   --background-end-rgb: 0, 0, 0;
+}
 
-  --primary: 163 230 53; /* lime-400 */
-  --accent: 34 211 238; /* cyan-400 */
-  --secondary: 192 132 252; /* purple-400 */
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
   min-height: 100vh;
   overflow-x: hidden;
+  background:
+    radial-gradient(circle at top left, rgba(132, 204, 22, 0.12), transparent 30%),
+    radial-gradient(circle at top right, rgba(6, 182, 212, 0.10), transparent 28%),
+    radial-gradient(circle at bottom center, rgba(168, 85, 247, 0.10), transparent 30%),
+    linear-gradient(
+      180deg,
+      rgb(var(--background-start-rgb)) 0%,
+      rgb(var(--background-mid-rgb)) 45%,
+      rgb(var(--background-end-rgb)) 100%
+    );
 }
 
 @layer components {
   .glass {
-    @apply bg-white/5 backdrop-blur-lg border border-white/10 shadow-xl;
+    @apply border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl;
+    box-shadow:
+      0 10px 30px rgba(0,0,0,0.25),
+      inset 0 1px 0 rgba(255,255,255,0.05);
   }
-  
+
   .glass-hover {
-    @apply hover:bg-white/10 hover:border-white/20 transition-all duration-300;
+    @apply transition-all duration-300 hover:bg-white/10 hover:border-white/20 hover:-translate-y-0.5;
   }
 
   .text-gradient {
-    @apply bg-gradient-to-r from-lime-400 via-cyan-400 to-purple-400 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-lime-300 via-cyan-300 to-purple-300 bg-clip-text text-transparent;
   }
 
-  .animate-blob {
-    animation: blob 7s infinite;
-  }
-
-  .animation-delay-2000 {
-    animation-delay: 2s;
-  }
-
-  .animation-delay-4000 {
-    animation-delay: 4s;
+  .animate-fade-in {
+    animation: fadeIn .5s ease forwards;
   }
 }
 
-@keyframes blob {
-  0% {
-    transform: translate(0px, 0px) scale(1);
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
   }
-  33% {
-    transform: translate(30px, -50px) scale(1.1);
-  }
-  66% {
-    transform: translate(-20px, 20px) scale(0.9);
-  }
-  100% {
-    transform: translate(0px, 0px) scale(1);
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-/* Custom Scrollbar */
+/* Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255,255,255,0.04);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
+  background: rgba(255,255,255,0.16);
+  border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255,255,255,0.28);
 }
 
-.recharts-cartesian-grid-horizontal line,
-.recharts-cartesian-grid-vertical line {
-  stroke: rgba(255, 255, 255, 0.1);
+/* Recharts */
+.recharts-cartesian-grid line {
+  stroke: rgba(255,255,255,0.08);
 }
 
 .recharts-text {
-  fill: rgba(255, 255, 255, 0.6) !important;
+  fill: rgba(255,255,255,0.65) !important;
   font-size: 12px;
+}
+
+/* PDF / Print */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  button,
+  textarea {
+    display: none !important;
+  }
+
+  .glass {
+    background: white !important;
+    color: black !important;
+    border: 1px solid #ddd !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+  }
+
+  .text-gradient {
+    color: black !important;
+    background: none !important;
+    -webkit-text-fill-color: black !important;
+  }
 }
