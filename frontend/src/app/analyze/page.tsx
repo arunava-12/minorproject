@@ -311,7 +311,7 @@ export default function AnalyzePage() {
                 </button>
 
                 <button
-                  onClick={() => exportToPDF()}
+                  onClick={() => exportToPDF(question, winner, results)}
                   className="flex w-full items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 hover:bg-white/10"
                 >
                   <FileText className="h-4 w-4" />
