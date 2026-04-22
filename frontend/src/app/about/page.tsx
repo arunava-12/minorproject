@@ -46,10 +46,10 @@ export default function About() {
           </h2>
           <div className="space-y-4 text-white/70">
             <p>
-              Systemic bias and misinformation in AI can have real-world consequences. By quantifying 
-              a model's "Truth Score," we can better understand the risks associated with deploying 
-              certain models in high-stakes environments.
-            </p>
+            Systemic bias and misinformation in AI can have real-world consequences. By quantifying 
+            a model's "Reliability Index," we can better understand the risks associated with deploying 
+            certain models in high-stakes environments.
+          </p>
             <p>
               Robustness against adversarial prompts is not just a feature; it is a requirement 
               for trust in the AI era.
@@ -81,8 +81,8 @@ export default function About() {
           },
           {
             icon: Brain,
-            title: "Truth Score",
-            desc: "A composite metric derived from embedding similarity to human-verified factual statements.",
+            title: "Reliability Index",
+            desc: "A composite metric derived from embedding similarity to human-verified factual statements and response consistency.",
             color: "text-cyan-400"
           },
           {

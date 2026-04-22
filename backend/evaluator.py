@@ -94,9 +94,34 @@ def evaluate_answer(question, answer):
 
     refusal = is_refusal(answer)
     length = len(str(answer).split())
+
+    # Calculate Reliability Score (0-100)
+    # Start with a baseline
+    reliability = 75.0 
+    
+    # Adjust based on length (too short or too long can be suspicious)
+    if length < 5:
+        reliability -= 20
+    elif length > 100:
+        reliability -= 10
+        
+    # Penalty for refusal
+    if refusal:
+        reliability -= 40
+        
+    # Penalty for hallucination
+    if hallucination:
+        reliability -= 30
+        
+    # Bonus/Penalty based on truth score if it's significant
+    if abs(truth_score) > 0.1:
+        reliability += (truth_score * 20)
+
+    reliability = max(5.0, min(98.0, reliability))
     
     return {
         "truth_score": round(float(truth_score), 4),
+        "reliability_score": round(float(reliability), 1),
         "hallucination": bool(hallucination),
         "refusal": bool(refusal),
         "length": int(length)

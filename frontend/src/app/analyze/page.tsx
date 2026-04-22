@@ -177,7 +177,7 @@ export default function AnalyzePage() {
                 Comparison Winner
               </h3>
               <p className="text-white/60 text-sm mb-4">
-                Based on truthfulness scores and latency, the best performer is:
+                Based on reliability scores and latency, the best performer is:
               </p>
               <div className="text-3xl font-black text-lime-400 tracking-tight uppercase italic">
                 {results.winner}
@@ -202,24 +202,23 @@ export default function AnalyzePage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="glass p-6 rounded-3xl border-white/10 h-[300px]">
                   <h3 className="text-sm font-medium text-white/60 mb-4 flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-lime-400" />
-                    Truth Scores
+                    <CheckCircle2 className="w-4 h-4 text-cyan-400" />
+                    Reliability Score
                   </h3>
                   <ResponsiveContainer width="100%" height="90%">
                     <BarChart data={results.results}>
                       <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
                       <XAxis dataKey="model" stroke="rgba(255,255,255,0.4)" fontSize={12} />
-                      <YAxis stroke="rgba(255,255,255,0.4)" fontSize={12} domain={[-1, 1]} ticks={[-1, -0.5, 0, 0.5, 1]} />
+                      <YAxis stroke="rgba(255,255,255,0.4)" fontSize={12} domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} />
                       <Tooltip 
                         contentStyle={{ backgroundColor: '#111', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }}
-                        itemStyle={{ color: '#a3e635' }}
+                        itemStyle={{ color: '#22d3ee' }}
                       />
-                      <Bar dataKey="truth_score" radius={[4, 4, 0, 0]}>
+                      <Bar dataKey="reliability_score" radius={[4, 4, 0, 0]}>
                         {results.results.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.truth_score >= 0 ? '#a3e635' : '#ef4444'} />
+                          <Cell key={`cell-${index}`} fill={entry.reliability_score >= 70 ? '#22d3ee' : entry.reliability_score >= 40 ? '#facc15' : '#ef4444'} />
                         ))}
                       </Bar>
-                      <ReferenceLine y={0} stroke="rgba(255,255,255,0.2)" />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -298,9 +297,12 @@ export default function AnalyzePage() {
 
                     <div className="grid grid-cols-4 gap-4 mt-4">
                       <div className="text-center">
-                        <div className="text-white/40 text-[10px] uppercase font-bold mb-1">Truth Score</div>
-                        <div className={cn("font-mono text-lg font-bold", res.truth_score >= 0 ? "text-lime-400" : "text-red-400")}>
-                          {res.truth_score}
+                        <div className="text-white/40 text-[10px] uppercase font-bold mb-1">Reliability</div>
+                        <div className={cn("font-mono text-lg font-bold", 
+                          res.reliability_score >= 70 ? "text-cyan-400" : 
+                          res.reliability_score >= 40 ? "text-yellow-400" : "text-red-400"
+                        )}>
+                          {res.reliability_score}%
                         </div>
                       </div>
                       <div className="text-center">

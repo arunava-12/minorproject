@@ -62,7 +62,7 @@ export default function Dashboard() {
     accuracy: m.Accuracy * 100,
     hallucination: m["Hallucination Rate"] * 100,
     f1: m.F1 * 100,
-    truth: (m["Truth Score"] + 0.2) * 200, // Normalize for radar
+    reliability: (m["Truth Score"] + 0.2) * 200, // Normalize for radar
     refusal: m["Refusal Rate"] * 100
   }));
 
@@ -173,7 +173,7 @@ export default function Dashboard() {
               <PolarGrid stroke="rgba(255,255,255,0.1)" />
               <PolarAngleAxis dataKey="name" />
               <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} />
-              <Radar name="Truth" dataKey="truth" stroke="#06b6d4" fill="#06b6d4" fillOpacity={0.6} />
+              <Radar name="Reliability" dataKey="reliability" stroke="#06b6d4" fill="#06b6d4" fillOpacity={0.6} />
               <Tooltip 
                 contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }}
               />
@@ -212,8 +212,8 @@ export default function Dashboard() {
                 <th className="pb-4 font-medium cursor-pointer hover:text-lime-400" onClick={() => toggleSort("F1")}>
                   <div className="flex items-center gap-2">F1 Score <ArrowUpDown className="w-3 h-3" /></div>
                 </th>
-                <th className="pb-4 font-medium cursor-pointer hover:text-lime-400" onClick={() => toggleSort("Truth Score")}>
-                   <div className="flex items-center gap-2">Truth Score <ArrowUpDown className="w-3 h-3" /></div>
+                <th className="pb-4 font-medium cursor-pointer hover:text-cyan-400" onClick={() => toggleSort("Truth Score")}>
+                   <div className="flex items-center gap-2">Reliability <ArrowUpDown className="w-3 h-3" /></div>
                 </th>
                 <th className="pb-4 font-medium">Rank</th>
                 <th className="pb-4 font-medium text-right px-4">Actions</th>
@@ -271,8 +271,8 @@ export default function Dashboard() {
                  <span className="font-mono text-red-400">{(m["Hallucination Rate"] * 100).toFixed(2)}%</span>
                </div>
                <div className="flex justify-between text-sm">
-                 <span className="text-white/40">Truth Score</span>
-                 <span className="font-mono text-cyan-400">{m["Truth Score"].toFixed(4)}</span>
+                 <span className="text-white/40">Reliability Index</span>
+                 <span className="font-mono text-cyan-400">{((m["Truth Score"] + 0.2) * 50).toFixed(1)}%</span>
                </div>
                <div className="flex justify-between text-sm">
                  <span className="text-white/40">Avg Length</span>

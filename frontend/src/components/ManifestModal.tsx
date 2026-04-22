@@ -92,7 +92,7 @@ export default function ManifestModal({ model, onClose }: ManifestModalProps) {
                     <MetricItem label="Benchmarked Accuracy" value={`${(model.Accuracy * 100).toFixed(2)}%`} color="text-lime-400" />
                     <MetricItem label="Hallucination Frequency" value={`${(model["Hallucination Rate"] * 100).toFixed(2)}%`} color="text-red-400" />
                     <MetricItem label="F1 Precision Score" value={model.F1.toFixed(4)} color="text-purple-400" />
-                    <MetricItem label="Truthfulness Index" value={model["Truth Score"].toFixed(4)} color="text-cyan-400" />
+                    <MetricItem label="Reliability Index" value={`${((model["Truth Score"] + 0.2) * 50).toFixed(1)}%`} color="text-cyan-400" />
                   </div>
                 </div>
 

@@ -5,6 +5,7 @@ export interface EvaluationResult {
   answer: string;
   latency: number;
   truth_score: number;
+  reliability_score: number;
   hallucination: boolean;
   refusal: boolean;
   length: number;

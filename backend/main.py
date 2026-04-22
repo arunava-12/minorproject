@@ -91,7 +91,7 @@ async def ask_question(request: AskRequest):
         # Filter out errors
         valid_results = [r for r in results if not r["answer"].startswith("Error:")]
         if valid_results:
-            winner = max(valid_results, key=lambda x: (x["truth_score"], -x["latency"]))["model"]
+            winner = max(valid_results, key=lambda x: (x["reliability_score"], -x["latency"]))["model"]
 
     return {
         "question": request.question,
