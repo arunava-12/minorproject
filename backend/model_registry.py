@@ -35,7 +35,7 @@ def clean_answer(text):
 
 class ModelRegistry:
     def __init__(self):
-        BASE = r"D:\vscode\minorproject demo\backend\models"
+        BASE = os.path.join(os.path.dirname(__file__), "models")
 
         self.models = {
             "mistral": {"id": os.path.join(BASE, "mistral"), "format": "mistral"},
